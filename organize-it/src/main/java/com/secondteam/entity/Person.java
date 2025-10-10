@@ -6,9 +6,9 @@ import java.util.Objects;
 //Entity
 public class Person implements Comparable<Person> {
 
-    private String firstName;
-    private String lastName;
-    private int age;
+    private final String firstName;
+    private final String lastName;
+    private final int age;
 
     @Override
     public String toString() {
@@ -48,9 +48,6 @@ public class Person implements Comparable<Person> {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    private Person() {
     }
 
     @Override
