@@ -1,7 +1,8 @@
 package com.secondteam;
 
-public class Main {
+public class Launcher {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        var consoleHandler = new ConsoleHandler();
+        consoleHandler.run(); 
     }
 }
