@@ -29,7 +29,7 @@ import java.util.List;
 
 public interface Controller {
 
-    List<Person> execute () throws AppException;
+    <T> List<T> execute () throws AppException;
     //List <?> execute () throws AppException;
 
 
