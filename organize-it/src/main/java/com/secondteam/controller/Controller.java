@@ -1,2 +1,6 @@
-package com.secondteam.controller;public interface Controller {
+package com.secondteam.controller;
+
+public interface Controller {
+
+    void execute();
 }
