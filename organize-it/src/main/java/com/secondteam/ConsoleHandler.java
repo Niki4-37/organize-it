@@ -5,8 +5,9 @@ import java.util.Scanner;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.utils.ControllerDispatcher;
+import com.secondteam.utils.DelegateListener;
 
-public class ConsoleHandler {
+public class ConsoleHandler implements DelegateListener{
 
     private Optional<Controller> controller = Optional.empty();
 
@@ -25,7 +26,7 @@ public class ConsoleHandler {
                 initController(consoleString);
             }
             if (controller.isPresent()) {
-                controller.get().execute();
+                controller.get().execute(this);
             } 
         }
 
@@ -35,5 +36,10 @@ public class ConsoleHandler {
 
     private void initController(String consoleString) {
         controller = ControllerDispatcher.getController(consoleString);
+    }
+
+    @Override
+    public void executionCompleted() {
+        controller = Optional.empty();
     }
 }
