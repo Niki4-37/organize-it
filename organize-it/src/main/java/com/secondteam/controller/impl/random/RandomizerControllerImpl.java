@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomizerControllerImpl<T> implements Controller {
-    private final Randomize<T> generator;
+public class RandomizerControllerImpl implements Controller {
+    private final EntitySynthFactory;
     private final Random random = new Random();
 
     public RandomizerControllerImpl(Randomize<T> randomize) {
