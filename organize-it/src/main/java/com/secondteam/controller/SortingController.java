@@ -1,7 +1,7 @@
 package com.secondteam.controller;
 
-import com.secondteam.entity.Entity;
-import com.secondteam.utils.EntityContainer;
+import com.secondteam.person.Person;
+import com.secondteam.utils.PersonContainer;
 import com.secondteam.utils.DelegateListener;
 import com.secondteam.utils.UtilArray;
 
@@ -16,25 +16,25 @@ public class SortingController implements Controller {
     @Override
     public void execute(DelegateListener delegate) {
         int fieldId = requestSortFieldIdFromUser();
-        Comparator<Entity> comparator = getComparatorByFieldId(fieldId);
+        Comparator<Person> comparator = getComparatorByFieldId(fieldId);
 
-        UtilArray utilArray = new UtilArray(EntityContainer.getEntityArray());
+        UtilArray utilArray = new UtilArray(PersonContainer.getPersonArray());
         utilArray.sort(comparator);
-        EntityContainer.setEntityArray(utilArray.getArray());
+        PersonContainer.setPersonArray(utilArray.getArray());
 
         if(delegate != null) {
             delegate.executionCompleted();
         }
     }
 
-    private Comparator<Entity> getComparatorByFieldId(int fieldId) {
+    private Comparator<Person> getComparatorByFieldId(int fieldId) {
         switch (fieldId) {
             case 1:
-                return Comparator.comparing(Entity::getField1);
+                return Comparator.comparing(Person::getFirstName);
             case 2:
-                return Comparator.comparing(Entity::getField2);
+                return Comparator.comparing(Person::getLastName);
             case 3:
-                return Comparator.comparing(Entity::getField3);
+                return Comparator.comparing(Person::getAge);
             default:
                 throw new IllegalArgumentException("fieldToSortBy must be 1, 2 or 3");
         }
