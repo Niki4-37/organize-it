@@ -23,6 +23,10 @@ public class Person {
         return age;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private String lastName;
         private String firstName;

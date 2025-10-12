@@ -29,7 +29,7 @@ public class EntitySynthFactory {
         return Person.builder()
                 .setFirstName(randomName(FIRST_NAME))
                 .setLastName(randomName(LAST_NAME))
-                .setAge(RANDOM.nextInt(0, 80))
+                .setAge(String.valueOf(RANDOM.nextInt(0, 80)))
                 .build();
     }
 
