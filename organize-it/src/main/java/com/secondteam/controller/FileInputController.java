@@ -6,7 +6,7 @@ import com.secondteam.controller.converter.Converter;
 import com.secondteam.controller.converter.PersonConverter;
 import com.secondteam.controller.validator.PersonValidator;
 import com.secondteam.controller.validator.Validator;
-import com.secondteam.entity.Person;
+import com.secondteam.person.Person;
 import com.secondteam.exception.AppException;
 
 import java.io.BufferedReader;
@@ -23,7 +23,7 @@ public class FileInputController extends InputController<Person> {
 
     //"src\\main\\resources\\person_source.txt"
     //organize-it/target/target/person_source.txt
-    private final String fileNameSource = "target\\classes\\person_source.txt";
+    private final String fileNameSource = "person_source.txt";
 
 
     public FileInputController (Validator validator, Converter<Person> converter) {
