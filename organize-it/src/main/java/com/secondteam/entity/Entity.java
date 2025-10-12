@@ -1,4 +1,4 @@
-package entity;
+package com.secondteam.entity;
 
 public class Entity {
     private String field1;
