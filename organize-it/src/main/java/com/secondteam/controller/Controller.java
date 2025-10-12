@@ -1,8 +1,12 @@
 package com.secondteam.controller;
 
-import com.secondteam.utils.DelegateListener;
+import com.secondteam.exception.AppException;
 
-public interface Controller {
+import java.util.List;
 
-    void execute(DelegateListener delegate);
+public interface Controller<T> {
+
+    List<T> execute () throws AppException;
+
 }
+
