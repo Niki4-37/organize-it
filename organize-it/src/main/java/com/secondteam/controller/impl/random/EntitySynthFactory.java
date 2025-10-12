@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class EntitySynthFactory {
     private static final Random RANDOM = new Random();
-    private static final String[] FIELD_1 = {
+    private static final String[] FIRST_NAME= {
             "Anna",
             "Inga",
             "Tom",
@@ -15,7 +15,7 @@ public class EntitySynthFactory {
             "Marya",
             "Piter"
     };
-    private static final String[] FIELD_2 = {
+    private static final String[] LAST_NAME = {
             "Williams",
             "Smith",
             "Harrison",
@@ -25,11 +25,11 @@ public class EntitySynthFactory {
             "Johnson"
     };
 
-    public Entity random() {
-        return Entity.builder()
-                .setField1(randomName(FIELD_1))
-                .setField2(randomName(FIELD_2))
-                .setField3(RANDOM.nextInt(0, 80))
+    public Person random() {
+        return Person.builder()
+                .setFirstName(randomName(FIRST_NAME))
+                .setLastName(randomName(LAST_NAME))
+                .setAge(RANDOM.nextInt(0, 80))
                 .build();
     }
 
