@@ -2,7 +2,7 @@ package com.secondteam.consolehandler;
 
 import java.util.Scanner;
 
-// Класс для работы с консолью
+
 public class ConsoleHandler {
     public static void write (String value) {
         System.out.println(value);

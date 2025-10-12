@@ -8,7 +8,7 @@ import com.secondteam.entity.Person;
 public class PersonConverter implements Converter <Person> {
     @Override
     public Person convert (String value) {
-        String [] data = value.split(" ");
+        String [] data = value.split("[ ]+");
         return Person.builder().setFirstName(data[0])
                 .setLastName(data[1])
                 .setAge(Integer.parseInt(data[2]))
