@@ -1,6 +1,6 @@
-package com.secondteam.controller.impl.random;
+package com.secondteam.controller.random;
 
-import com.secondteam.entity.Person;
+import com.secondteam.person.Person;
 
 import java.util.Random;
 
