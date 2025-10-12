@@ -5,10 +5,10 @@ import java.util.Comparator;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
-public class UtilArray<E> {
+public class UtilArray {
     private static final int PARALLEL_THRESHOLD = 1000;
 
-    private class MergeSortTask extends RecursiveTask<ArrayList<E>> {
+    private static class MergeSortTask<E> extends RecursiveTask<ArrayList<E>> {
         private final ArrayList<E> array;
         private final Comparator<E> comparator;
 
@@ -18,14 +18,14 @@ public class UtilArray<E> {
                 return array;
             }
             int mid = array.size() / 2;
-            if(array.size() < PARALLEL_THRESHOLD) {
+            if (array.size() < PARALLEL_THRESHOLD) {
                 ArrayList<E> left = mergeSort(new ArrayList<>(array.subList(0, mid)), comparator);
                 ArrayList<E> right = mergeSort(new ArrayList<>(array.subList(mid, array.size())), comparator);
                 return merge(left, right, comparator);
             }
-            MergeSortTask leftTask = new MergeSortTask(new ArrayList<>(array.subList(0, mid)), comparator);
+            MergeSortTask<E> leftTask = new MergeSortTask<>(new ArrayList<>(array.subList(0, mid)), comparator);
             leftTask.fork();
-            MergeSortTask rightTask = new MergeSortTask(new ArrayList<>(array.subList(mid, array.size())), comparator);
+            MergeSortTask<E> rightTask = new MergeSortTask<>(new ArrayList<>(array.subList(mid, array.size())), comparator);
             ArrayList<E> right = rightTask.compute();
             ArrayList<E> left = leftTask.join();
             return merge(left, right, comparator);
@@ -57,27 +57,20 @@ public class UtilArray<E> {
         }
     }
 
-    private ArrayList<E> array;
-
-
-    public void sort(Comparator<E> comparator) {
-        array = mergeSort(array, comparator);
+    public static <E extends Comparable<E>> void sort(ArrayList<E> array) {
+        sort(array, Comparator.naturalOrder());
     }
 
-    private ArrayList<E> mergeSort(ArrayList<E> array, Comparator<E> comparator) {
+    public static <E> void sort(ArrayList<E> array, Comparator<E> comparator) {
+        ArrayList<E> sorted = mergeSort(array, comparator);
+        array.clear();
+        array.addAll(sorted);
+    }
+
+    private static <E> ArrayList<E> mergeSort(ArrayList<E> array, Comparator<E> comparator) {
         ForkJoinPool pool = ForkJoinPool.commonPool();
-        return pool.invoke(new MergeSortTask(array, comparator));
+        return pool.invoke(new MergeSortTask<>(array, comparator));
     }
 
-    public UtilArray(ArrayList<E> array) {
-        this.array = array;
-    }
-
-    public ArrayList<E> getArray() {
-        return array;
-    }
-
-    public void setArray(ArrayList<E> array) {
-        this.array = array;
-    }
+    private UtilArray(){}
 }
