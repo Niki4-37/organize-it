@@ -1,26 +1,24 @@
 package com.secondteam;
 
 import java.util.Optional;
-import java.util.Scanner;
 
 import com.secondteam.controller.Controller;
+import com.secondteam.utils.ConsoleHandler;
 import com.secondteam.utils.ControllerDispatcher;
 import com.secondteam.utils.DelegateListener;
 
-public class ConsoleHandler implements DelegateListener{
+public class Dispatcher  implements DelegateListener{
 
     private Optional<Controller> controller = Optional.empty();
 
+    public Dispatcher() {};
+
     public void run() {
-
-        Scanner scanner = new Scanner(System.in);
-
+        
         while (true) {
-            System.out.println("Поддерживает команды: \\n 'exit' - для выхода \\n выберите действие: ");
+            ConsoleHandler.write("Поддерживает команды: \\n 'exit' - для выхода \\n выберите действие: ");
             
-            var consoleString = scanner.nextLine();
-
-            if ("exit".equalsIgnoreCase(consoleString)) { break; }
+            var consoleString = ConsoleHandler.read();
 
             if (controller.isEmpty()) {
                 initController(consoleString);
@@ -29,9 +27,6 @@ public class ConsoleHandler implements DelegateListener{
                 controller.get().execute(this);
             } 
         }
-
-        scanner.close();
-        System.out.println("Приложение завершило работу.");
     }
 
     private void initController(String consoleString) {
