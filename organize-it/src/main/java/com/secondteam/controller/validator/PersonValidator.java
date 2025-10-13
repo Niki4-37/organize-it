@@ -1,6 +1,7 @@
 package com.secondteam.controller.validator;
 
 public class PersonValidator extends AppValidator {
+    @Override
     public boolean validate (String value){
         if (value == null) return false;
         String[] data = value.split("\\s+");

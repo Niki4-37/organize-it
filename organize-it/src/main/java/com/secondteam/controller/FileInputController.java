@@ -15,7 +15,6 @@ public class FileInputController extends InputController<Person> {
 
     private final String fileNameSource = "person_source.txt";
 
-
     public FileInputController (Validator validator, Converter<Person> converter) {
         super (validator,converter);
     }
@@ -81,6 +80,5 @@ public class FileInputController extends InputController<Person> {
                 .map(converter::convert)
                 .collect(Collectors.toList());
     }
-
 }
 
