@@ -4,7 +4,7 @@ import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.controller.converter.Converter;
 import com.secondteam.controller.validator.Validator;
 import com.secondteam.exception.AppException;
-import com.secondteam.model.Person;
+import com.secondteam.person.Person;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,31 +40,23 @@ public class ManualInputController extends InputController<Person> {
         }
 
         for (int i = 1; i <= count; i++) {
-            ConsoleHandler.write("Введите данные для человека #" + i + " (Фамилия Имя Возраст):");
+            ConsoleHandler.write("Введите данные для человека #" + i + " (Фамилия Имя Возраст) на английском, например: Ivanov Ivan 37:");
 
             while (true) {
                 String input = ConsoleHandler.read();
 
                 if (backToMenu(input)) return people;
 
-                if (!validator.isValid(input)) {
-                    ConsoleHandler.write("Неверный формат. Пример: Иванов Иван 37");
+                if (!validator.validate(input)) {
+                    ConsoleHandler.write("Неверный формат или символы не на английском. Пример правильного ввода: Ivanov Ivan 37");
                     continue;
                 }
 
-                String[] parts = input.trim().split("\\s+");
-
                 try {
-                    Person person = new Person.Builder()
-                            .setLastName(parts[0])
-                            .setFirstName(parts[1])
-                            .setAge(parts[2])
-                            .build();
-
+                    Person person = converter.convert(input);
                     people.add(person);
                     ConsoleHandler.write("Добавлен: " + person);
                     break; // переходим к следующему человеку
-
                 } catch (IllegalArgumentException | IllegalStateException e) {
                     ConsoleHandler.write("Ошибка: " + e.getMessage());
                 }
