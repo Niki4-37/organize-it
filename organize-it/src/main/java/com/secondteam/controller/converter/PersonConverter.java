@@ -2,9 +2,6 @@ package com.secondteam.controller.converter;
 
 import com.secondteam.person.Person;
 
-// Реализация интерфейс Converter для Person
-// Остальные реализации делайте по аналогии!!!
-
 public class PersonConverter implements Converter <Person> {
     @Override
     public Person convert (String value) {
