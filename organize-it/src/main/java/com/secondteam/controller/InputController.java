@@ -7,7 +7,6 @@ import com.secondteam.exception.AppException;
 
 import java.util.List;
 
-//Основа для реализаций Controller: FileInputController, ConsoleInputController
 public abstract class InputController <T> implements Controller<T> {
 
     final Validator validator;
@@ -30,7 +29,6 @@ public abstract class InputController <T> implements Controller<T> {
             ConsoleHandler.write ("Вы перешли в главное меню");
             return true;
         }
-
         return false;
     }
 }

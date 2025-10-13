@@ -1,28 +1,18 @@
 package com.secondteam.controller;
 
-
 import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.controller.converter.Converter;
-import com.secondteam.controller.converter.PersonConverter;
-import com.secondteam.controller.validator.PersonValidator;
 import com.secondteam.controller.validator.Validator;
 import com.secondteam.person.Person;
 import com.secondteam.exception.AppException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class FileInputController extends InputController<Person> {
 
-
-    //"src\\main\\resources\\person_source.txt"
-    //organize-it/target/target/person_source.txt
     private final String fileNameSource = "person_source.txt";
 
 
@@ -40,70 +30,57 @@ public class FileInputController extends InputController<Person> {
         if (backToMenu(fileName)) return null;
         if (fileName.equalsIgnoreCase("file")) fileName = fileNameSource;
 
-        List <String> lineList = readFile(fileName);
         List<Person> result;
-        result = createCollection (lineList);
-
-        // By Stream
-        //result = createCollectionByStream(fileName);
+        if (fileName.equals(fileNameSource)) result = createCollectionByInnerFile(fileName);
+        else result = createCollectionByOuterFile(fileName);
 
         return result;
     }
 
-    private List <String> readFile (String fileName) throws AppException {
-        List <String> list = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader (new FileReader(fileName))) {
-            String value;
-            int line = 1;
-            while ( (value =br.readLine()) != null) {
-                if (!validator.validate(value)) {
-                    ConsoleHandler.write (line + " строка содержит неверные данные в файле: " + fileName);
-                    throw new AppException("Ошибка валидации данных");
-                }
-                list.add(value);
-                line++;
+    // Дополнительное задание 3
+    private List <Person> createCollectionByOuterFile(String fileName) throws AppException {
+        List <Person> result;
+        try (LineNumberReader lnr = new LineNumberReader(new FileReader(fileName))) {
+            result = collectByStream (lnr);
+            int lineNumber = lnr.getLineNumber();
+            if (lineNumber != result.size()) {
+                ConsoleHandler.write (lineNumber + " строка содержит неверные данные в файле: " + fileName);
+                throw new AppException("Ошибка валидации данных");
             }
-            return list;
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
             throw new AppException ("Отсутствует файл c исходными данными: " + fileName, e);
+        } catch (IOException e) {
+            throw new RuntimeException("ОШИБКА ВВОДА-ВЫВОДА");
         }
-    }
-
-    private List <Person>createCollection (List<String> data) {
-        List <Person> result = new ArrayList<>(data.size());
-
-            for (String value: data)
-                result.add(converter.convert(value));
-
         return result;
     }
 
-    // Дополнительное задание 3 (Не использую, показать)
-    private List <Person> createCollectionByStream (String filename) {
-        try {
-            return Files.readAllLines(Path.of(filename)).stream()
-                                    .filter(validator::validate)
-                                    .map(converter::convert)
-                                    .collect(Collectors.toList());
+    private List <Person> createCollectionByInnerFile(String fileName) throws AppException {
+        List <Person> result;
+        ClassLoader loader = this.getClass().getClassLoader();
+        try (LineNumberReader lnr = new LineNumberReader(new InputStreamReader
+                (Objects.requireNonNull(loader.getResourceAsStream(fileName))))) {
+            result = collectByStream (lnr);
+            int lineNumber = lnr.getLineNumber();
+            if (lineNumber != result.size()) {
+                ConsoleHandler.write (lineNumber + " строка содержит неверные данные в файле: " + fileName);
+                throw new AppException("Ошибка валидации данных");
+            }
+        } catch (FileNotFoundException e) {
+            throw new AppException ("Отсутствует файл c исходными данными: " + fileName, e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("ОШИБКА ВВОДА-ВЫВОДА");
         }
+        return result;
     }
 
-    public static void main(String[] args) {
-
-        Validator validator = new PersonValidator();
-        Converter <Person> converter = new PersonConverter();
-        Controller <Person> controller = new FileInputController(validator, converter);
-
-        List <Person> result = null;
-        try{
-            result = controller.execute();
-        } catch (AppException e){
-            ConsoleHandler.write(e.getMessage());
-        }
-        if (result == null) ConsoleHandler.write(null);
-        if (result != null) ConsoleHandler.write(result.toString());
+    private List <Person> collectByStream (LineNumberReader lnr) {
+        return lnr.lines()
+                .map(String::trim)
+                .takeWhile(validator::validate)
+                .map(converter::convert)
+                .collect(Collectors.toList());
     }
+
 }
 

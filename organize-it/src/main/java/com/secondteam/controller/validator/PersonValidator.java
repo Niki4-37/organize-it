@@ -1,10 +1,9 @@
 package com.secondteam.controller.validator;
 
-// Реализация Validator для Person
 public class PersonValidator extends AppValidator {
     public boolean validate (String value){
         if (value == null) return false;
-        String[] data = value.split("[ ]+");
+        String[] data = value.split("\\s+");
         if (data.length != 3) return false;
         return checkName(data[0]) &&checkName(data[1]) &&checkAge(data[2]);
     }
