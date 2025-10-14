@@ -11,44 +11,33 @@ import java.util.List;
 
 public class ManualInputController extends InputController<Person> {
 
+    private final Integer countLimit;
+
     public ManualInputController(Validator validator, Converter<Person> converter) {
+        this(validator, converter, null);
+    }
+
+    public ManualInputController(Validator validator, Converter<Person> converter, Integer countLimit) {
         super(validator, converter);
+        this.countLimit = countLimit;
     }
 
     @Override
     public List<Person> execute() throws AppException {
         List<Person> people = new ArrayList<>();
 
-        ConsoleHandler.write("Сколько людей вы хотите добавить? Введите целое число:");
-
-        int count = 0;
-        while (true) {
-            String countInput = ConsoleHandler.read();
-
-            if (backToMenu(countInput)) return people;
-
-            try {
-                count = Integer.parseInt(countInput.trim());
-                if (count <= 0) {
-                    ConsoleHandler.write("Введите положительное число.");
-                    continue;
-                }
-                break;
-            } catch (NumberFormatException e) {
-                ConsoleHandler.write("Ошибка: введите целое число.");
-            }
-        }
+        int count = (countLimit == null) ? readCount() : countLimit;
 
         for (int i = 1; i <= count; i++) {
-            ConsoleHandler.write("Введите данные для человека #" + i + " (Фамилия Имя Возраст) на английском, например: Ivanov Ivan 37:");
-
+            promptInput(i);
             while (true) {
-                String input = ConsoleHandler.read();
+                String input = ConsoleHandler.readLine();
+                input = input.trim();
 
                 if (backToMenu(input)) return people;
 
                 if (!validator.validate(input)) {
-                    ConsoleHandler.write("Неверный формат или символы не на английском. Пример правильного ввода: Ivanov Ivan 37");
+                    ConsoleHandler.write("Неверный формат по валидатору.");
                     continue;
                 }
 
@@ -56,7 +45,7 @@ public class ManualInputController extends InputController<Person> {
                     Person person = converter.convert(input);
                     people.add(person);
                     ConsoleHandler.write("Добавлен: " + person);
-                    break; // переходим к следующему человеку
+                    break;
                 } catch (IllegalArgumentException | IllegalStateException e) {
                     ConsoleHandler.write("Ошибка: " + e.getMessage());
                 }
@@ -64,5 +53,30 @@ public class ManualInputController extends InputController<Person> {
         }
 
         return people;
+    }
+
+    private int readCount() {
+        ConsoleHandler.write("Сколько людей вы хотите добавить? Введите целое положительное число:");
+
+        while (true) {
+            String countInput = ConsoleHandler.readLine();
+
+            if (backToMenu(countInput)) return 0;
+
+            try {
+                int count = Integer.parseInt(countInput.trim());
+                if (count <= 0) {
+                    ConsoleHandler.write("Введите положительное число.");
+                    continue;
+                }
+                return count;
+            } catch (NumberFormatException e) {
+                ConsoleHandler.write("Ошибка: введите целое число.");
+            }
+        }
+    }
+
+    private void promptInput(int index) {
+        ConsoleHandler.write("Введите данные для человека #" + index + " (Фамилия Имя Возраст), например: Ivanov Ivan 37");
     }
 }
