@@ -79,4 +79,25 @@ public class Person {
                 ", age=" + age +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (!lastName.equals(person.lastName)) return false;
+        if (!firstName.equals(person.firstName)) return false;
+        return age.equals(person.age);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = lastName.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + age.hashCode();
+        return result;
+    }
+
 }
