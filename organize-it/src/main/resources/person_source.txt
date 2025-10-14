@@ -1,4 +1,4 @@
-Collin Jo 45
+Farrell Colin 45
 Smith Adam 27
 Zellveger Renee 55
 Ivanov Ivan 32
@@ -8,3 +8,18 @@ Willis Bruce 70
 Crowe Russell 61
 Tyson Michael 59
 Wahlberg Mark 54
+Hanks Tom 75
+Smith Will 55
+Eastwood Clint 90
+Reeves Keanu 50
+Freeman Morgan 82
+Clooney George 65
+Stone Emma 40
+Johansson Scarlett 45
+Lawrence Jennifer 30
+Olsen Elizabeth 35
+Kunis Mila 36
+Alba Jessica 45
+Fox Megan 42
+Portman Natalie 52
+Charlize Theron 18

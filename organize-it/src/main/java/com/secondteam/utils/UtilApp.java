@@ -1,5 +1,7 @@
 package com.secondteam.utils;
 
+import com.secondteam.person.Person;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
@@ -66,6 +68,23 @@ public class UtilApp {
         List<E> sorted = mergeSort(list, comparator);
         list.clear();
         list.addAll(sorted);
+    }
+
+    public static void specialSort(List<Person> list) {
+        List<Person> evenPersons = new ArrayList<>();
+        List<Integer> evenPositions = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            Person person = list.get(i);
+            if(person.getAge() % 2 == 0) {
+                evenPersons.add(person);
+                evenPositions.add(i);
+            }
+        }
+        sort(evenPersons, Comparator.comparingInt(Person::getAge));
+        for (int i = 0; i < evenPositions.size(); i++) {
+            list.set(evenPositions.get(i), evenPersons.get(i));
+        }
     }
 
     private static <E> List<E> mergeSort(List<E> list, Comparator<E> comparator) {
