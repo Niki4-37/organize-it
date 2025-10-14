@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.secondteam.controller.FileInputController;
 
+import com.secondteam.controller.ManualInputController;
 import com.secondteam.controller.converter.Converter;
 import com.secondteam.controller.converter.PersonConverter;
 import com.secondteam.controller.random.RandomizerControllerImpl;
@@ -20,7 +21,8 @@ public class Launcher {
 
         Map<String, Controller<Person>> controllers = Map.of(
             "file", new FileInputController(validator, converter),
-            "random", new RandomizerControllerImpl()
+            "random", new RandomizerControllerImpl(),
+            "manual", new ManualInputController(validator, converter)
         );
 
         Comparator<Person> defaultComparator = Comparator.comparing(Person::getLastName)
