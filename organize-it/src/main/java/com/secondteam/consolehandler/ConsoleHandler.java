@@ -17,16 +17,6 @@ public class ConsoleHandler {
         }
         return consoleString;
     }
-
-    public static String readLine () {
-        String consoleString = SCANNER.nextLine().trim();
-        if ("exit".equalsIgnoreCase(consoleString)) {
-            write("Приложение завершило работу");
-            System.exit(0);
-        }
-        return consoleString;
-    }
-
 }
 
 
