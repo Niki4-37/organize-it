@@ -10,8 +10,8 @@ public class ConsoleHandler {
     }
 
     public static String read () {
-        String consoleString = SCANNER.next().trim();
-        if ("exit".equalsIgnoreCase(consoleString)) { 
+        String consoleString = SCANNER.nextLine().trim();
+        if ("exit".equalsIgnoreCase(consoleString)) {
             write("Приложение завершило работу");
             System.exit(0);
         }
