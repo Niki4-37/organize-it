@@ -1,7 +1,6 @@
 package com.secondteam;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.secondteam.controller.FileInputController;
@@ -24,15 +23,14 @@ public class Launcher {
             "random", new RandomizerControllerImpl()
         );
 
-        Comparator<Person> firstNameComparator = (one, two) -> one.getFirstName().compareToIgnoreCase(two.getFirstName());
-        Comparator<Person> lastNameComparator = (one, two) -> one.getLastName().compareToIgnoreCase(two.getLastName());
-        Comparator<Person> ageComparator = (one,two) -> one.getAge().compareTo(two.getAge());
-        Comparator<Person> defaultComparator = firstNameComparator.thenComparing(lastNameComparator).thenComparing(ageComparator);
+        Comparator<Person> defaultComparator = Comparator.comparing(Person::getLastName)
+            .thenComparing(Comparator.comparing(Person::getFirstName))
+            .thenComparing(Comparator.comparingInt(Person::getAge));
         
         Map<String, Comparator<Person>> comparators = Map.of(
-            "field1", firstNameComparator,
-            "field2", lastNameComparator,
-            "field3", ageComparator,
+            "surname", Comparator.comparing(Person::getLastName),
+            "name", Comparator.comparing(Person::getFirstName),
+            "age", Comparator.comparingInt(Person::getAge),
             "default", defaultComparator
         );
         
