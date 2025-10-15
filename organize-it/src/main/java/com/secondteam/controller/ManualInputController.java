@@ -31,7 +31,7 @@ public class ManualInputController extends InputController<Person> {
         for (int i = 1; i <= count; i++) {
             promptInput(i);
             while (true) {
-                String input = ConsoleHandler.readLine();
+                String input = ConsoleHandler.read();
                 input = input.trim();
 
                 if (backToMenu(input)) return people;
@@ -59,7 +59,7 @@ public class ManualInputController extends InputController<Person> {
         ConsoleHandler.write("Сколько людей вы хотите добавить? Введите целое положительное число:");
 
         while (true) {
-            String countInput = ConsoleHandler.readLine();
+            String countInput = ConsoleHandler.read();
 
             if (backToMenu(countInput)) return 0;
 

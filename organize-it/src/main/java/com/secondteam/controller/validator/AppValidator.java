@@ -6,6 +6,7 @@ public abstract class AppValidator implements Validator {
 
     final boolean validateInt (String value) {
         try {
+            if (value.matches("^0\\d+")) return false;
             Integer.parseInt (value);
             return true;
         } catch (NumberFormatException e) {
