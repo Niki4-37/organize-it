@@ -11,62 +11,71 @@ import java.util.Optional;
 
 public class ManualInputController extends InputController<Person> {
 
+    private final Integer countLimit;
+
     public ManualInputController(Validator validator, Converter<Person> converter) {
+        this(validator, converter, null);
+    }
+
+    public ManualInputController(Validator validator, Converter<Person> converter, Integer countLimit) {
         super(validator, converter);
+        this.countLimit = countLimit;
     }
 
     @Override
     public List<Person> execute() {
         List<Person> people = new ArrayList<>();
 
-        ConsoleHandler.write("Сколько людей вы хотите добавить? Введите целое число:");
-        Optional<Integer> optionalCount = readCount();
-        if (optionalCount.isEmpty()) return people;
-        int count = optionalCount.get();
+        int count = (countLimit == null) ? readCount() : countLimit;
 
         for (int i = 1; i <= count; i++) {
-            ConsoleHandler.write("Введите данные для человека #" + i + " (Фамилия Имя Возраст) на английском, например: Ivanov Ivan 37:");
-            Optional<Person> person = readPerson();
-            if (person.isEmpty()) return people;
-            people.add(person.get());
-            ConsoleHandler.write("Добавлен: " + person);
-        }
-        return people;
-    }
+            promptInput(i);
+            while (true) {
+                String input = ConsoleHandler.read();
+                input = input.trim();
 
-    private Optional<Person> readPerson() {
-        while (true) {
-            String input = ConsoleHandler.read();
-            if (backToMenu(input)) return Optional.empty();
-            if (!validator.validate(input)) {
-                ConsoleHandler.write("Неверный формат или символы не на английском. Пример правильного ввода: Ivanov Ivan 37");
-                continue;
-            }
-            try {
-                return Optional.of(converter.convert(input));
-            } catch (IllegalArgumentException | IllegalStateException e) {
-                ConsoleHandler.write("Ошибка: " + e.getMessage());
-            }
-        }
-    }
+                if (backToMenu(input)) return people;
 
+                if (!validator.validate(input)) {
+                    ConsoleHandler.write("Неверный формат по валидатору.");
+                    continue;
+                }
 
-    private Optional<Integer> readCount() {
-        int count;
-        while (true) {
-            String countInput = ConsoleHandler.read();
-            if (backToMenu(countInput)) return Optional.empty();
-            try {
-                count = Integer.parseInt(countInput.trim());
-            } catch (NumberFormatException e) {
-                ConsoleHandler.write("Ошибка: введите целое число.");
-                continue;
-            }
-            if (count <= 0) {
-                ConsoleHandler.write("Введите положительное число.");
-                continue;
+                try {
+                    Person person = converter.convert(input);
+                    people.add(person);
+                    ConsoleHandler.write("Добавлен: " + person);
+                    break;
+                } catch (IllegalArgumentException | IllegalStateException e) {
+                    ConsoleHandler.write("Ошибка: " + e.getMessage());
+                }
             }
             return Optional.of(count);
         }
+    }
+
+    private int readCount() {
+        ConsoleHandler.write("Сколько людей вы хотите добавить? Введите целое положительное число:");
+
+        while (true) {
+            String countInput = ConsoleHandler.read();
+
+            if (backToMenu(countInput)) return 0;
+
+            try {
+                int count = Integer.parseInt(countInput.trim());
+                if (count <= 0) {
+                    ConsoleHandler.write("Введите положительное число.");
+                    continue;
+                }
+                return count;
+            } catch (NumberFormatException e) {
+                ConsoleHandler.write("Ошибка: введите целое число.");
+            }
+        }
+    }
+
+    private void promptInput(int index) {
+        ConsoleHandler.write("Введите данные для человека #" + index + " (Фамилия Имя Возраст), например: Ivanov Ivan 37");
     }
 }
