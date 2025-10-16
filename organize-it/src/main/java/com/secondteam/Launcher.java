@@ -14,6 +14,8 @@ import com.secondteam.controller.validator.PersonValidator;
 import com.secondteam.person.Person;
 import com.secondteam.controller.Controller;
 
+import java.util.function.Function;
+
 public class Launcher {
     public static void main(String[] args) {
         
@@ -37,11 +39,13 @@ public class Launcher {
             "4", defaultComparator
         );
 
-        Map<String, Function<Person, ?>> fieldGetters = Map.of(
-            "1", Person::getLastName,
-            "2", Person::getFirstName,
-            "3", Person::getAge
-        );
+        Map<String, Function<Person, ?>> fieldGetters = new HashMap<>();
+        
+        {
+            fieldGetters.put("1", Person::getLastName);
+            fieldGetters.put("2", Person::getFirstName);
+            fieldGetters.put("3", Person::getAge);
+        }
         
         Dispatcher dispatcher = new Dispatcher(controllers, comparators, fieldGetters);
         dispatcher.run();
