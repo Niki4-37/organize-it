@@ -11,6 +11,8 @@ import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.utils.FileWriter;
 import com.secondteam.utils.UtilApp;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 public class Dispatcher{
