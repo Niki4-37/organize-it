@@ -30,6 +30,7 @@ import com.secondteam.person.Person;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DispatcherTest {
     private static Dispatcher dispatcher;
+    private static final InputStream stdin = System.in;
     private static String args = "manual\r\nrandom\r\nfile\r\n123\r\n";
     private static InputStream is = new ByteArrayInputStream(args.getBytes());
 
@@ -106,6 +107,6 @@ public class DispatcherTest {
 
     @AfterAll
     static void afterAll() {
-        System.setIn(System.in);
+        System.setIn(stdin);
     }
 }

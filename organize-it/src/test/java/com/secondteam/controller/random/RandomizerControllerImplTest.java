@@ -1,48 +1,58 @@
 package com.secondteam.controller.random;
 
 import com.secondteam.exception.AppException;
-import org.junit.jupiter.api.BeforeEach;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RandomizerControllerImplTest {
     private final RandomizerControllerImpl underTest = new RandomizerControllerImpl();
+    private static final InputStream stdin = System.in;
+    private static String args = "5\r\n-5\r\n\"expectedSize\"\r\n";
+    private static InputStream is = new ByteArrayInputStream(args.getBytes());
 
-    @BeforeEach
-    void cleanUpInput() {
-        System.setIn(null);
+    @BeforeAll
+    static void beforeAll() {
+        System.setIn(is);
+    }
+
+    @AfterAll
+    static void afterAll() {
+        System.setIn(stdin);
     }
 
     @Test
+    @Order(1)
     void execute_success() throws AppException {
-        //Given
+
         int expectedSize = 5;
-        System.setIn(new ByteArrayInputStream(String.valueOf(expectedSize).getBytes()));
-        //When
+
         var test = underTest.execute();
-        //Then
+
         assertNotNull(test);
         assertEquals(expectedSize, test.size());
     }
 
     @Test
+    @Order(2)
     void execute_input_less_0() {
-        //Given
-        int expectedSize = -5;
-        System.setIn(new ByteArrayInputStream(String.valueOf(expectedSize).getBytes()));
-        //When Then
         var exception = assertThrows(AppException.class, underTest::execute);
         assertEquals("Указанное число меньше 0",exception.getMessage());
     }
 
     @Test
+    @Order(3)
     void execute_number_format_exeption() {
-        //Given
-        System.setIn(new ByteArrayInputStream("expectedSize".getBytes()));
-        //When Then
         assertThrows(AppException.class, underTest::execute);
     }
 
