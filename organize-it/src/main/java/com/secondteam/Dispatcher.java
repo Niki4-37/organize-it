@@ -11,6 +11,8 @@ import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.utils.FileWriter;
 import com.secondteam.utils.UtilApp;
 
+import java.util.function.Function;
+
 public class Dispatcher{
 
     private boolean isSortedFlag;
@@ -38,10 +40,10 @@ public class Dispatcher{
         while (true) {
             List<Person> result = getListUsingController();
             for (Person person : result) 
-                ConsoleHandler.write(toString(person));
+                ConsoleHandler.write(person.toString());
             sort(result);
             for (Person person : result) 
-                ConsoleHandler.write(toString(person));
+                ConsoleHandler.write(person.toString());
             binarySearch(result, Comparator.naturalOrder());
             writeToFile(result);
         }
@@ -115,7 +117,7 @@ public class Dispatcher{
         
         String command = ConsoleHandler.read().toLowerCase();
         
-        while (!comparators.containsKey(command) {
+        while (!comparators.containsKey(command)) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -135,7 +137,7 @@ public class Dispatcher{
 
         String command = ConsoleHandler.read().toLowerCase();
 
-        while (!fieldGetters.containsKey(command) {
+        while (!fieldGetters.containsKey(command)) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -144,7 +146,8 @@ public class Dispatcher{
         String value = ConsoleHandler.read().toLowerCase();
         
         if (isSortedFlag) {
-            UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
+            int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
+            ConsoleHandler.write ("Индекс элемента коллекции: " + toString(index));
         } else {
             ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
             while (true) {
@@ -153,7 +156,9 @@ public class Dispatcher{
                 if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) break;
                 if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                     sort(list);
-                    return UtilApp.binarySearch(list, key, valueExtractor, comparator);
+                    int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
+                    ConsoleHandler.write ("Индекс элемента коллекции: " + toString(index));
+                    break;
                 } 
         }
         
