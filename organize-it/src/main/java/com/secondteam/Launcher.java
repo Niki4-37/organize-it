@@ -41,11 +41,9 @@ public class Launcher {
 
         Map<String, Function<Person, ?>> fieldGetters = new HashMap<>();
         
-        {
-            fieldGetters.put("1", Person::getLastName);
-            fieldGetters.put("2", Person::getFirstName);
-            fieldGetters.put("3", Person::getAge);
-        }
+        fieldGetters.put("1", Person::getLastName);
+        fieldGetters.put("2", Person::getFirstName);
+        fieldGetters.put("3", Person::getAge);
         
         Dispatcher dispatcher = new Dispatcher(controllers, comparators, fieldGetters);
         dispatcher.run();
