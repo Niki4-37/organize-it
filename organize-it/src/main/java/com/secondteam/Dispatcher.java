@@ -162,7 +162,7 @@ public class Dispatcher{
             if (command == "3") {
                 int ageValue = Integer.parseInt(inputValue);
                 Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
-                index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, ageExtractor, Comparator.naturalOrder());
+                index = UtilApp.BinarySearchUtils.binarySearch(list, ageValue, ageExtractor, Comparator.naturalOrder());
             } 
             ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
         } else {
@@ -184,7 +184,7 @@ public class Dispatcher{
                     if (command == "3") {
                         int ageValue = Integer.parseInt(inputValue);
                         Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
-                        index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, ageExtractor, Comparator.naturalOrder());
+                        index = UtilApp.BinarySearchUtils.binarySearch(list, ageValue, ageExtractor, Comparator.naturalOrder());
                     } 
                     ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
                     break;
