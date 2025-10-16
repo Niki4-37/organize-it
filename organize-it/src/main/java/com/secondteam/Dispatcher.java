@@ -96,7 +96,7 @@ public class Dispatcher{
         String command = ConsoleHandler.read().toLowerCase();
     
         while (true) {
-            if (command.equalsIgnoreCase("no") || command.command.equalsIgnoreCase("n")) {
+            if (command.equalsIgnoreCase("no") || command.equalsIgnoreCase("n")) {
                 return false;
             }
             if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
