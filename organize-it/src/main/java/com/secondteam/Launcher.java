@@ -24,8 +24,8 @@ public class Launcher {
 
         Map<String, Controller<Person>> controllers = Map.of(
             "1", new FileInputController(validator, converter),
-            "2", new RandomizerControllerImpl(),
-            "3", new ManualInputController(validator, converter)
+            "2", new ManualInputController(validator, converter),
+            "3", new RandomizerControllerImpl()
         );
 
         Comparator<Person> defaultComparator = Comparator.comparing(Person::getLastName)
