@@ -47,7 +47,7 @@ public class Dispatcher{
             sort(result);
             for (Person person : result) 
                 ConsoleHandler.write(person.toString());
-            _binarySearch(result, Comparator.naturalOrder());
+            innerBinarySearch(result);
             writeToFile(result);
         }
     }
@@ -128,7 +128,7 @@ public class Dispatcher{
         return comparators.get(command);
     }
 
-    private <V> void _binarySearch(List<Person> list, Comparator<Person> comparator) {
+    private void innerBinarySearch(List<Person> list) {
 
         ConsoleHandler.write (
             """
@@ -137,19 +137,33 @@ public class Dispatcher{
               - для сортировки по имени ........ введите цифру \"2\" 
               - для сортировки по возрасту ..... введите цифру \"3\" 
             """);
-
+        
         String command = ConsoleHandler.read().toLowerCase();
-
+        
         while (!fieldGetters.containsKey(command)) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
-
+        
         ConsoleHandler.write ("Введите значение для поиска...");
-        String value = ConsoleHandler.read().toLowerCase();
+        String inputValue = ConsoleHandler.read().toLowerCase();
+
+        int index = -1;
         
         if (isSortedFlag) {
-            int index = UtilApp.BinarySearchUtils.binarySearch(list, value, fieldGetters.get(command), comparator);
+            if (command == "1") {
+                Function<Person, String> lastNameExtractor = (Function<Person, String>) fieldGetters.get(command);
+                index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, lastNameExtractor, String::compareTo);
+            } 
+            if (command == "2") {
+                Function<Person, String> firstNameExtractor = (Function<Person, String>) fieldGetters.get(command);
+                index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, firstNameExtractor, String::compareTo);
+            } 
+            if (command == "3") {
+                int ageValue = Integer.parseInt(inputValue);
+                Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
+                index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, ageExtractor, Comparator.naturalOrder());
+            } 
             ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
         } else {
             ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
@@ -159,7 +173,19 @@ public class Dispatcher{
                 if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) break;
                 if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                     sort(list);
-                    int index = UtilApp.BinarySearchUtils.binarySearch(list, value, fieldGetters.get(command), comparator);
+                    if (command == "1") {
+                        Function<Person, String> lastNameExtractor = (Function<Person, String>) fieldGetters.get(command);
+                        index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, lastNameExtractor, String::compareTo);
+                    } 
+                    if (command == "2") {
+                        Function<Person, String> firstNameExtractor = (Function<Person, String>) fieldGetters.get(command);
+                        index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, firstNameExtractor, String::compareTo);
+                    } 
+                    if (command == "3") {
+                        int ageValue = Integer.parseInt(inputValue);
+                        Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
+                        index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, ageExtractor, Comparator.naturalOrder());
+                    } 
                     ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
                     break;
                 } 
