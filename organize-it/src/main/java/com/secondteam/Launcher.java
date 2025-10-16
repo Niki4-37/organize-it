@@ -40,7 +40,7 @@ public class Launcher {
         Map<String, Function<Person, ?>> fieldGetters = Map.of(
             "1", Person::getLastName,
             "2", Person::getFirstName,
-            "3", Person::getAge,
+            "3", Person::getAge
         );
         
         Dispatcher dispatcher = new Dispatcher(controllers, comparators, fieldGetters);
