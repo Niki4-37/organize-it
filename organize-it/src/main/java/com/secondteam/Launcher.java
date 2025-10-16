@@ -16,13 +16,13 @@ import com.secondteam.controller.Controller;
 
 public class Launcher {
     public static void main(String[] args) {
-        Validator validator = new PersonValidator();
+        Validator         validator = new PersonValidator();
         Converter<Person> converter = new PersonConverter();
 
         Map<String, Controller<Person>> controllers = Map.of(
-            "file", new FileInputController(validator, converter),
-            "random", new RandomizerControllerImpl(),
-            "manual", new ManualInputController(validator, converter)
+            "1", new FileInputController(validator, converter),
+            "2", new RandomizerControllerImpl(),
+            "3", new ManualInputController(validator, converter)
         );
 
         Comparator<Person> defaultComparator = Comparator.comparing(Person::getLastName)
@@ -30,10 +30,10 @@ public class Launcher {
             .thenComparing(Comparator.comparingInt(Person::getAge));
         
         Map<String, Comparator<Person>> comparators = Map.of(
-            "surname", Comparator.comparing(Person::getLastName),
-            "name", Comparator.comparing(Person::getFirstName),
-            "age", Comparator.comparingInt(Person::getAge),
-            "default", defaultComparator
+            "1", Comparator.comparing   (Person::getLastName),
+            "2", Comparator.comparing   (Person::getFirstName),
+            "3", Comparator.comparingInt(Person::getAge),
+            "4", defaultComparator
         );
         
         Dispatcher dispatcher = new Dispatcher(controllers, comparators);
