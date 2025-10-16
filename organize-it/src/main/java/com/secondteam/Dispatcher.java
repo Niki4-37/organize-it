@@ -28,14 +28,19 @@ public class Dispatcher{
         ConsoleHandler.write ("");
         ConsoleHandler.write ("----------------------------------------------------------------");
         ConsoleHandler.write ("");
-        ConsoleHandler.write ("Приветствуем вас в приложении Organaze-it");
+        ConsoleHandler.write ("Приветствуем вас в приложении \"Organaze-it\"");
         ConsoleHandler.write ("");
         ConsoleHandler.write ("----------------------------------------------------------------");
         ConsoleHandler.write ("");
         
         while (true) {
             List<Person> result = getListUsingController();
+            for (Person person : result) 
+                ConsoleHandler.write(toString(person));
             sort(result);
+            for (Person person : result) 
+                ConsoleHandler.write(toString(person));
+            
             writeToFile(result);
         }
     }
@@ -54,7 +59,7 @@ public class Dispatcher{
         String command = ConsoleHandler.read().toLowerCase();;
         
         while (!controllers.containsKey(command)) {
-            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
 
@@ -79,7 +84,7 @@ public class Dispatcher{
     private boolean shouldSort() { 
         String command;
         while (true) {
-            ConsoleHandler.write("Требуется ли осуществить сортировку? Введите      Yes/No");
+            ConsoleHandler.write("Отсортировать коллекцию? Введите: Yes(Y)/No(N)");
             command = ConsoleHandler.read().toLowerCase();
             if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return false;
             if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) return true;
@@ -92,19 +97,26 @@ public class Dispatcher{
         while (true){
             ConsoleHandler.write (
                 """
-                Введите команду \"surname\" для сортировки по фамилии
-                Введите команду \"name\" для сортировки по имени
-                Введите команду \"age\" для сортировки по возрасту
-                Введите команду \"default\" для сортировки по всем полям
+                Пожалуйста, выберите по какому полю отсортировать коллекцию и введите соответствующую цифру:
+                  - для сортировки по фамилии ...... введите цифру \"1\" 
+                  - для сортировки по имени ........ введите цифру \"2\" 
+                  - для сортировки по возрасту ..... введите цифру \"3\" 
+                  - для сортировки по всем полям ... введите цифру \"4\" 
                 """);
             command = ConsoleHandler.read().toLowerCase();
 
             if (comparators.containsKey(command)) { break; }
-            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
         }
 
         return comparators.get(command);
     }
+
+    
+
+
+
+    
 
     private void writeToFile(List<Person> list) {
         if (list == null) return;
