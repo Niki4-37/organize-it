@@ -3,6 +3,7 @@ package com.secondteam;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.exception.AppException;
@@ -25,7 +26,19 @@ public class Dispatcher{
         ConsoleHandler.write ("Приветствуем вас в приложении Organaze-it ");
         
         while (true) {
-            List<Person> result = getListUsingController();
+            List<Person> result = null;
+            var optionalController = selectController();
+
+            if (optionalController.isEmpty()) {
+                ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+                continue;
+            }
+
+            try {
+                result = optionalController.get().execute();
+            } catch (AppException e) {
+                ConsoleHandler.write(e.getMessage());
+            }
 
             sort(result);
 
@@ -33,8 +46,7 @@ public class Dispatcher{
         }
     }
 
-    private List<Person> getListUsingController() {
-        
+    private Optional<Controller<Person>> selectController() {
         ConsoleHandler.write (
             """
             Требуется создать коллекцию сущностей Person
@@ -45,24 +57,11 @@ public class Dispatcher{
         
         String command = ConsoleHandler.read().toLowerCase();;
         
-        while (!controllers.containsKey(command)) {
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
-            command = ConsoleHandler.read().toLowerCase();
-        }
-
-        List<Person> list = null;
-        
-        try {
-            list = controllers.get(command).execute();
-        } catch (AppException e) {
-            ConsoleHandler.write(e.getMessage());
-        }
-
-        return list;
+        return controllers.containsKey(command) ? Optional.of(controllers.get(command)) : Optional.empty(); 
     }
 
     private void sort(List<Person> list) {
-        if (list == null || !shouldSort()) return;
+        if (list == null || list.isEmpty() || !shouldSort()) return;
         UtilApp.sort(list, getComparator());
     }
 
@@ -97,7 +96,7 @@ public class Dispatcher{
     }
 
     private void writeToFile(List<Person> list) {
-        if (list == null) return;
+        if (list == null || list.isEmpty()) return;
         while (true) {
             ConsoleHandler.write("Сохранить коллекцию в файл? Введите      Yes/No");
             String command = ConsoleHandler.read().toLowerCase(); 
