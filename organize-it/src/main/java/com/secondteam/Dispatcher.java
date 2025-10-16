@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.function.Function;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.exception.AppException;
@@ -12,19 +14,17 @@ import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.utils.FileWriter;
 import com.secondteam.utils.UtilApp;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 public class Dispatcher{
 
     private boolean isSortedFlag;
 
-    private Map<String, Controller<Person>> controllers;
-    private Map<String, Comparator<Person>> comparators;
-    private HashMap<Person, ?> fieldGetters;
+    private Map<String, Controller<Person>   > controllers;
+    private Map<String, Comparator<Person>   > comparators;
+    private Map<String, Function  <Person, ?>> fieldGetters;
 
-    public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators, HashMap<Person, ?> fieldGetters) {
+    public Dispatcher(Map<String, Controller<Person>   > controllers, 
+                      Map<String, Comparator<Person>   > comparators, 
+                      Map<String, Function  <Person, ?>> fieldGetters) {
         this.controllers  = controllers;
         this.comparators  = comparators;
         this.fieldGetters = fieldGetters;
