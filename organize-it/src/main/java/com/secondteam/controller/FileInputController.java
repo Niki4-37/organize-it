@@ -31,8 +31,7 @@ public class FileInputController extends InputController<Person> {
 
         List<Person> result;
         if (fileName.equals(fileNameSource)) result = createCollectionByInnerFile(fileName);
-        //else result = createCollectionByOuterFile(fileName);
-        else result = createCollectionByInnerFile(fileName);
+        else result = createCollectionByOuterFile(fileName);
 
         return result;
     }
