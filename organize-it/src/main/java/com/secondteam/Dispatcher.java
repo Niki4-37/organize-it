@@ -96,8 +96,8 @@ public class Dispatcher{
         
         String command = ConsoleHandler.read().toLowerCase();
         
-        while (!command.equalsIgnoreCase("no" ) || !command.equalsIgnoreCase("n") || 
-               !command.equalsIgnoreCase("yes") || !command.equalsIgnoreCase("y")) {
+        while (!command.equalsIgnoreCase("no" ) && !command.equalsIgnoreCase("n") && 
+               !command.equalsIgnoreCase("yes") && !command.equalsIgnoreCase("y")) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
