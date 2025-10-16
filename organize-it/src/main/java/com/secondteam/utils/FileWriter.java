@@ -13,7 +13,7 @@ import com.secondteam.person.Person;
 
 public class FileWriter {
 
-    private static  final String RESOURCE_PATH = "./organize-it/src/main/resources/";
+    private static  final String RESOURCE_PATH = "./organize-it/target/results/";
 
     public static void write(String fileName, List<Person> list) throws AppException {
         try {

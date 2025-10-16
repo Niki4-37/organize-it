@@ -3,7 +3,6 @@ package com.secondteam.controller;
 import com.secondteam.consolehandler.ConsoleHandler;
 import com.secondteam.controller.converter.Converter;
 import com.secondteam.controller.validator.Validator;
-import com.secondteam.exception.AppException;
 import com.secondteam.person.Person;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ManualInputController extends InputController<Person> {
     }
 
     @Override
-    public List<Person> execute() throws AppException {
+    public List<Person> execute() {
         List<Person> people = new ArrayList<>();
 
         int count = (countLimit == null) ? readCount() : countLimit;
@@ -51,7 +50,6 @@ public class ManualInputController extends InputController<Person> {
                 }
             }
         }
-
         return people;
     }
 

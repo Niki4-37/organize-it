@@ -3,6 +3,8 @@ package com.secondteam;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.exception.AppException;
@@ -16,6 +18,8 @@ public class Dispatcher{
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
 
+    private boolean isSorted = false;
+
     public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators) {
         this.controllers = controllers;
         this.comparators = comparators;
@@ -25,16 +29,30 @@ public class Dispatcher{
         ConsoleHandler.write ("Приветствуем вас в приложении Organaze-it ");
         
         while (true) {
-            List<Person> result = getListUsingController();
+            List<Person> result = null;
+            isSorted = false;
+            var optionalController = selectController();
+
+            if (optionalController.isEmpty()) {
+                ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+                continue;
+            }
+
+            try {
+                result = optionalController.get().execute();
+            } catch (AppException e) {
+                ConsoleHandler.write(e.getMessage());
+            }
 
             sort(result);
 
             writeToFile(result);
+
+            find(result);
         }
     }
 
-    private List<Person> getListUsingController() {
-        
+    private Optional<Controller<Person>> selectController() {
         ConsoleHandler.write (
             """
             Требуется создать коллекцию сущностей Person
@@ -45,25 +63,13 @@ public class Dispatcher{
         
         String command = ConsoleHandler.read().toLowerCase();;
         
-        while (!controllers.containsKey(command)) {
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
-            command = ConsoleHandler.read().toLowerCase();
-        }
-
-        List<Person> list = null;
-        
-        try {
-            list = controllers.get(command).execute();
-        } catch (AppException e) {
-            ConsoleHandler.write(e.getMessage());
-        }
-
-        return list;
+        return controllers.containsKey(command) ? Optional.of(controllers.get(command)) : Optional.empty(); 
     }
 
     private void sort(List<Person> list) {
-        if (list == null || !shouldSort()) return;
+        if (list == null || list.isEmpty() || !shouldSort()) return;
         UtilApp.sort(list, getComparator());
+        isSorted = true;
     }
 
     private boolean shouldSort() {
@@ -97,7 +103,7 @@ public class Dispatcher{
     }
 
     private void writeToFile(List<Person> list) {
-        if (list == null) return;
+        if (list == null || list.isEmpty()) return;
         while (true) {
             ConsoleHandler.write("Сохранить коллекцию в файл? Введите      Yes/No");
             String command = ConsoleHandler.read().toLowerCase(); 
@@ -112,5 +118,31 @@ public class Dispatcher{
         } catch (AppException e) {
             ConsoleHandler.write(e.getMessage());
         }
+    }
+
+    private void find(List<Person> list) {
+        if (!isSorted) return;
+
+        ConsoleHandler.write("Хотите найти объект?      Yes/No");
+        String command = ConsoleHandler.read().toLowerCase(); 
+        if (command.equalsIgnoreCase("no")) return;
+
+        var controller = controllers.get("for_binary_search_controller");
+        if (controller == null) return;
+        
+        List<Person> listWithSearcingElement = null;
+        try {
+            listWithSearcingElement = controller.execute();
+        } catch (AppException e) {
+            e.printStackTrace();
+        }
+
+        String key = listWithSearcingElement.get(0).getLastName() + " " + listWithSearcingElement.get(0).getFirstName();
+        Function<Person, String> extractor = person -> person.getLastName() + " " + person.getFirstName(); 
+
+        int foundIndex = UtilApp.BinarySearchUtils.binarySearch(list, key, extractor);
+
+        System.out.println(foundIndex);
+
     }
 }
