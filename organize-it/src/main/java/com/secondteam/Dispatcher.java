@@ -19,9 +19,10 @@ public class Dispatcher{
     private Map<String, Comparator<Person>> comparators;
     private Map<Person, ?> fieldGetters;
 
-    public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators) {
-        this.controllers = controllers;
-        this.comparators = comparators;
+    public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators, Map<Person, ?> fieldGetters) {
+        this.controllers  = controllers;
+        this.comparators  = comparators;
+        this.fieldGetters = fieldGetters;
     };
 
     public void run() {
