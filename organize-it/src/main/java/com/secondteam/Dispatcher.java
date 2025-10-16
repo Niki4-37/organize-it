@@ -151,15 +151,15 @@ public class Dispatcher{
         int index = -1;
         
         if (isSortedFlag) {
-            if (command == "1") {
+            if (command.equals("1")) {
                 Function<Person, String> lastNameExtractor = (Function<Person, String>) fieldGetters.get(command);
                 index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, lastNameExtractor, String::compareTo);
             } 
-            if (command == "2") {
+            if (command.equals("2")) {
                 Function<Person, String> firstNameExtractor = (Function<Person, String>) fieldGetters.get(command);
                 index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, firstNameExtractor, String::compareTo);
             } 
-            if (command == "3") {
+            if (command.equals("3")) {
                 int ageValue = Integer.parseInt(inputValue);
                 Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
                 index = UtilApp.BinarySearchUtils.binarySearch(list, ageValue, ageExtractor, Comparator.naturalOrder());
@@ -173,15 +173,15 @@ public class Dispatcher{
                 if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) break;
                 if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                     sort(list);
-                    if (command == "1") {
+                    if (command.equals("1")) {
                         Function<Person, String> lastNameExtractor = (Function<Person, String>) fieldGetters.get(command);
                         index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, lastNameExtractor, String::compareTo);
                     } 
-                    if (command == "2") {
+                    if (command.equals("2")) {
                         Function<Person, String> firstNameExtractor = (Function<Person, String>) fieldGetters.get(command);
                         index = UtilApp.BinarySearchUtils.binarySearch(list, inputValue, firstNameExtractor, String::compareTo);
                     } 
-                    if (command == "3") {
+                    if (command.equals("3")) {
                         int ageValue = Integer.parseInt(inputValue);
                         Function<Person, Integer> ageExtractor = (Function<Person, Integer>) fieldGetters.get(command);
                         index = UtilApp.BinarySearchUtils.binarySearch(list, ageValue, ageExtractor, Comparator.naturalOrder());
