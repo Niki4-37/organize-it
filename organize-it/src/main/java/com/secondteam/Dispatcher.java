@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.exception.AppException;
@@ -17,6 +18,8 @@ public class Dispatcher{
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
 
+    private boolean isSorted = false;
+
     public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators) {
         this.controllers = controllers;
         this.comparators = comparators;
@@ -27,6 +30,7 @@ public class Dispatcher{
         
         while (true) {
             List<Person> result = null;
+            isSorted = false;
             var optionalController = selectController();
 
             if (optionalController.isEmpty()) {
@@ -43,6 +47,8 @@ public class Dispatcher{
             sort(result);
 
             writeToFile(result);
+
+            find(result);
         }
     }
 
@@ -63,6 +69,7 @@ public class Dispatcher{
     private void sort(List<Person> list) {
         if (list == null || list.isEmpty() || !shouldSort()) return;
         UtilApp.sort(list, getComparator());
+        isSorted = true;
     }
 
     private boolean shouldSort() {
@@ -111,5 +118,31 @@ public class Dispatcher{
         } catch (AppException e) {
             ConsoleHandler.write(e.getMessage());
         }
+    }
+
+    private void find(List<Person> list) {
+        if (!isSorted) return;
+
+        ConsoleHandler.write("Хотите найти объект?      Yes/No");
+        String command = ConsoleHandler.read().toLowerCase(); 
+        if (command.equalsIgnoreCase("no")) return;
+
+        var controller = controllers.get("for_binary_search_controller");
+        if (controller == null) return;
+        
+        List<Person> listWithSearcingElement = null;
+        try {
+            listWithSearcingElement = controller.execute();
+        } catch (AppException e) {
+            e.printStackTrace();
+        }
+
+        String key = listWithSearcingElement.get(0).getLastName() + " " + listWithSearcingElement.get(0).getFirstName();
+        Function<Person, String> extractor = person -> person.getLastName() + " " + person.getFirstName(); 
+
+        int foundIndex = UtilApp.BinarySearchUtils.binarySearch(list, key, extractor);
+
+        System.out.println(foundIndex);
+
     }
 }
