@@ -17,6 +17,7 @@ public class Dispatcher{
 
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
+    private Map<Person, ?> fieldGetters;
 
     public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators) {
         this.controllers = controllers;
@@ -133,7 +134,7 @@ public class Dispatcher{
 
         String command = ConsoleHandler.read().toLowerCase();
 
-        while (!search_options.containsKey(command) {
+        while (!fieldGetters.containsKey(command) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -142,7 +143,7 @@ public class Dispatcher{
         String value = ConsoleHandler.read().toLowerCase();
         
         if (isSortedFlag) {
-            UtilApp.binarySearch(list, value, search_options.get(command), comparator);
+            UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
         } else {
             ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
             while (true) {
