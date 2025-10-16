@@ -128,7 +128,7 @@ public class Dispatcher{
         return comparators.get(command);
     }
 
-    private <V> void _binarySearch(List<Person> list, Comparator<V> comparator) {
+    private <V> void _binarySearch(List<Person> list, Comparator<Person> comparator) {
 
         ConsoleHandler.write (
             """
@@ -149,7 +149,7 @@ public class Dispatcher{
         String value = ConsoleHandler.read().toLowerCase();
         
         if (isSortedFlag) {
-            int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
+            int index = UtilApp.BinarySearchUtils.binarySearch(list, value, fieldGetters.get(command), comparator);
             ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
         } else {
             ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
@@ -159,7 +159,7 @@ public class Dispatcher{
                 if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) break;
                 if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                     sort(list);
-                    int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
+                    int index = UtilApp.BinarySearchUtils.binarySearch(list, value, fieldGetters.get(command), comparator);
                     ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
                     break;
                 } 
