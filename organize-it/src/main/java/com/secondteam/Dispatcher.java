@@ -91,20 +91,20 @@ public class Dispatcher{
     }
 
     private boolean shouldSort() { 
-
         ConsoleHandler.write("Отсортировать коллекцию? Введите: Yes(Y)/No(N)");
-        
+    
         String command = ConsoleHandler.read().toLowerCase();
-        
-        while (!command.equalsIgnoreCase("no" ) && !command.equalsIgnoreCase("n") && 
-               !command.equalsIgnoreCase("yes") && !command.equalsIgnoreCase("y")) {
-            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
+    
+        while (true) {
+            if (command.equalsIgnoreCase("no") || command.command.equalsIgnoreCase("n")) {
+                return false;
+            }
+            if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
+                return true;
+            }
+            ConsoleHandler.write("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
-
-        if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return false;
-        if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) return true;
-        
     }
 
     private Comparator<Person> getComparator() {
