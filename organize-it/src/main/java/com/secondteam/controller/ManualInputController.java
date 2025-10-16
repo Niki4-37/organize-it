@@ -7,7 +7,6 @@ import com.secondteam.person.Person;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ManualInputController extends InputController<Person> {
 
@@ -50,8 +49,8 @@ public class ManualInputController extends InputController<Person> {
                     ConsoleHandler.write("Ошибка: " + e.getMessage());
                 }
             }
-            return Optional.of(count);
         }
+        return people;
     }
 
     private int readCount() {
