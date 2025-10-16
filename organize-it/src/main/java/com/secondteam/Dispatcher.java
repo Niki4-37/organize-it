@@ -1,8 +1,9 @@
 package com.secondteam;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.function.Function;
 
 import com.secondteam.controller.Controller;
 import com.secondteam.exception.AppException;
@@ -21,9 +22,9 @@ public class Dispatcher{
 
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
-    private Map<Person, ?> fieldGetters;
+    private HashMap<Person, ?> fieldGetters;
 
-    public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators, Map<Person, ?> fieldGetters) {
+    public Dispatcher(Map<String, Controller<Person>> controllers, Map<String, Comparator<Person>> comparators, HashMap<Person, ?> fieldGetters) {
         this.controllers  = controllers;
         this.comparators  = comparators;
         this.fieldGetters = fieldGetters;
@@ -127,7 +128,7 @@ public class Dispatcher{
         return comparators.get(command);
     }
 
-    private void binarySearch(List<Person> list, Comparator<V> comparator) {
+    private <V> void binarySearch(List<Person> list, Comparator<V> comparator) {
 
         ConsoleHandler.write (
             """
@@ -149,7 +150,7 @@ public class Dispatcher{
         
         if (isSortedFlag) {
             int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
-            ConsoleHandler.write ("Индекс элемента коллекции: " + toString(index));
+            ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
         } else {
             ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
             while (true) {
@@ -159,11 +160,12 @@ public class Dispatcher{
                 if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                     sort(list);
                     int index = UtilApp.binarySearch(list, value, fieldGetters.get(command), comparator);
-                    ConsoleHandler.write ("Индекс элемента коллекции: " + toString(index));
+                    ConsoleHandler.write ("Индекс элемента коллекции: " + String.valueOf(index));
                     break;
                 } 
-        }
+            }
         
+        }
     }
     
     private void writeToFile(List<Person> list) {
