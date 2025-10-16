@@ -12,31 +12,31 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
-
-
-
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FileInputControllerTest {
-
     private static Controller<Person> fic;
-    private final static InputStream stdin = System.in;
+    private static final InputStream stdin = System.in;
+    private static String args = "file\r\nMenu\r\n123\r\n";
+    private static InputStream is = new ByteArrayInputStream(args.getBytes());
 
     @BeforeAll
-          static    void BeforeAll() {
+    static void beforeAll() {
         Converter <Person> converter = new PersonConverter();
         Validator validator = new PersonValidator();
         fic = new FileInputController(validator, converter);
+        System.setIn(is);
     }
 
-    @AfterEach
-    void afterEach(){
+    @AfterAll
+    static void afterAll() {
         System.setIn(stdin);
     }
 
-
     @Test
+    @Order(1)
     @DisplayName("Корректная команда \"file\"")
     void commandFileCheck() {
-        System.setIn(new ByteArrayInputStream("file".getBytes()));
+
         List <Person> persons = null;
         try {
             persons = fic.execute();
@@ -48,9 +48,9 @@ public class FileInputControllerTest {
     }
 
     @Test
+    @Order(2)
     @DisplayName("Команда \"Menu\"")
     void commandMenuCheck() {
-        System.setIn(new ByteArrayInputStream("Menu".getBytes()));
         List <Person> persons = null;
         try {
             persons = fic.execute();
@@ -61,9 +61,10 @@ public class FileInputControllerTest {
     }
 
     @Test
+    @Order(3)
     @DisplayName("Не корректный полный путь к файлу")
-    void fullPathExceptionCheck()  {
-        System.setIn(new ByteArrayInputStream("123".getBytes()));
+    void badFullPathExceptionCheck() {
+
         List <Person> persons = null;
 
         AppException exception = Assertions.assertThrows(AppException.class, () -> { fic.execute(); });

@@ -100,7 +100,7 @@ public class UtilApp {
     
 
     // Утилиты для бинарного поиска 
-    class BinarySearchUtils {
+    public static class BinarySearchUtils {
 
         /**
          * Бинарный поиск в отсортированном списке с использованием callback для извлечения значения
