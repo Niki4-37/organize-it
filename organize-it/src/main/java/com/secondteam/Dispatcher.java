@@ -13,7 +13,7 @@ import com.secondteam.utils.UtilApp;
 
 public class Dispatcher{
 
-    private boolean flag;
+    private boolean isSortedFlag;
 
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
@@ -40,7 +40,7 @@ public class Dispatcher{
             sort(result);
             for (Person person : result) 
                 ConsoleHandler.write(toString(person));
-            
+            binarySearch(result, Comparator.naturalOrder());
             writeToFile(result);
         }
     }
@@ -71,53 +71,92 @@ public class Dispatcher{
             ConsoleHandler.write(e.getMessage());
         }
 
-        flag = false;
+        isSortedFlag = false;
         
         return list;
     }
 
     private void sort(List<Person> list) {
-        if (list == null || !shouldSort()) return;
+        if (list == null || !shouldSort()) 
+            return;
         UtilApp.sort(list, getComparator());
+        isSortedFlag = true;
     }
 
     private boolean shouldSort() { 
-        String command;
-        while (true) {
-            ConsoleHandler.write("Отсортировать коллекцию? Введите: Yes(Y)/No(N)");
+
+        ConsoleHandler.write("Отсортировать коллекцию? Введите: Yes(Y)/No(N)");
+        
+        String command = ConsoleHandler.read().toLowerCase();
+        
+        while (!command.equalsIgnoreCase("no" ) || !command.equalsIgnoreCase("n") || 
+               !command.equalsIgnoreCase("yes") || !command.equalsIgnoreCase("y")) {
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
-            if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return false;
-            if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) return true;
-            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
         }
+
+        if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return false;
+        if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) return true;
+        
     }
 
     private Comparator<Person> getComparator() {
-        String command;
-        while (true){
-            ConsoleHandler.write (
-                """
-                Пожалуйста, выберите по какому полю отсортировать коллекцию и введите соответствующую цифру:
-                  - для сортировки по фамилии ...... введите цифру \"1\" 
-                  - для сортировки по имени ........ введите цифру \"2\" 
-                  - для сортировки по возрасту ..... введите цифру \"3\" 
-                  - для сортировки по всем полям ... введите цифру \"4\" 
-                """);
-            command = ConsoleHandler.read().toLowerCase();
 
-            if (comparators.containsKey(command)) { break; }
+        ConsoleHandler.write (
+            """
+            Пожалуйста, выберите по какому полю отсортировать коллекцию и введите соответствующую цифру:
+              - для сортировки по фамилии ...... введите цифру \"1\" 
+              - для сортировки по имени ........ введите цифру \"2\" 
+              - для сортировки по возрасту ..... введите цифру \"3\" 
+              - для сортировки по всем полям ... введите цифру \"4\" 
+            """);
+        
+        String command = ConsoleHandler.read().toLowerCase();
+        
+        while (!comparators.containsKey(command) {
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
+            command = ConsoleHandler.read().toLowerCase();
         }
 
         return comparators.get(command);
     }
 
+    private void binarySearch(List<Person> list, Comparator<V> comparator) {
+
+        ConsoleHandler.write (
+            """
+            Пожалуйста, выберите по какому полю поизвести поиск и введите соответствующую цифру:
+              - для сортировки по фамилии ...... введите цифру \"1\" 
+              - для сортировки по имени ........ введите цифру \"2\" 
+              - для сортировки по возрасту ..... введите цифру \"3\" 
+            """);
+
+        String command = ConsoleHandler.read().toLowerCase();
+
+        while (!search_options.containsKey(command) {
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
+            command = ConsoleHandler.read().toLowerCase();
+        }
+
+        ConsoleHandler.write ("Введите значение для поиска...");
+        String value = ConsoleHandler.read().toLowerCase();
+        
+        if (isSortedFlag) {
+            UtilApp.binarySearch(list, value, search_options.get(command), comparator);
+        } else {
+            ConsoleHandler.write ("Внимание: коллекция неотсортирована.");
+            while (true) {
+                ConsoleHandler.write ("Отсортировать перед поиском? Введите: Yes(Y)/No(N)");
+                command = ConsoleHandler.read().toLowerCase();
+                if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) break;
+                if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
+                    sort(list);
+                    return UtilApp.binarySearch(list, key, valueExtractor, comparator);
+                } 
+        }
+        
+    }
     
-
-
-
-    
-
     private void writeToFile(List<Person> list) {
         if (list == null) return;
         while (true) {
