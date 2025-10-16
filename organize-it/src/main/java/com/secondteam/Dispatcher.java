@@ -53,7 +53,8 @@ public class Dispatcher{
     }
 
     private List<Person> getListUsingController() {
-        
+
+        ConsoleHandler.write("");
         ConsoleHandler.write (
             """
             Требуется создать коллекцию сущностей Person.
@@ -66,6 +67,7 @@ public class Dispatcher{
         String command = ConsoleHandler.read().toLowerCase();;
         
         while (!controllers.containsKey(command)) {
+            ConsoleHandler.write("");
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -91,6 +93,8 @@ public class Dispatcher{
     }
 
     private boolean shouldSort() { 
+
+        ConsoleHandler.write("");
         ConsoleHandler.write("Отсортировать коллекцию? Введите: Yes(Y)/No(N)");
     
         String command = ConsoleHandler.read().toLowerCase();
@@ -102,6 +106,7 @@ public class Dispatcher{
             if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) {
                 return true;
             }
+            ConsoleHandler.write("");
             ConsoleHandler.write("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -109,6 +114,7 @@ public class Dispatcher{
 
     private Comparator<Person> getComparator() {
 
+        ConsoleHandler.write("");
         ConsoleHandler.write (
             """
             Пожалуйста, выберите по какому полю отсортировать коллекцию и введите соответствующую цифру:
@@ -121,6 +127,7 @@ public class Dispatcher{
         String command = ConsoleHandler.read().toLowerCase();
         
         while (!comparators.containsKey(command)) {
+            ConsoleHandler.write("");
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
@@ -130,12 +137,13 @@ public class Dispatcher{
 
     private void innerBinarySearch(List<Person> list) {
 
+        ConsoleHandler.write("");
         ConsoleHandler.write (
             """
             Пожалуйста, выберите по какому полю поизвести поиск и введите соответствующую цифру:
-              - для сортировки по фамилии ...... введите цифру \"1\" 
-              - для сортировки по имени ........ введите цифру \"2\" 
-              - для сортировки по возрасту ..... введите цифру \"3\" 
+              - для поиска по фамилии ...... введите цифру \"1\" 
+              - для поиска по имени ........ введите цифру \"2\" 
+              - для поиска по возрасту ..... введите цифру \"3\" 
             """);
         
         String command = ConsoleHandler.read().toLowerCase();
@@ -144,7 +152,8 @@ public class Dispatcher{
             ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите...");
             command = ConsoleHandler.read().toLowerCase();
         }
-        
+
+        ConsoleHandler.write("");
         ConsoleHandler.write ("Введите значение для поиска...");
         String inputValue = ConsoleHandler.read().toLowerCase();
 
@@ -197,7 +206,8 @@ public class Dispatcher{
     private void writeToFile(List<Person> list) {
         if (list == null) return;
         while (true) {
-            ConsoleHandler.write("Сохранить коллекцию в файл? Введите      Yes/No");
+            ConsoleHandler.write("");
+            ConsoleHandler.write("Сохранить коллекцию в файл? Введите: Yes(Y)/No(N)");
             String command = ConsoleHandler.read().toLowerCase(); 
             if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return;
             if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) break;
