@@ -47,7 +47,7 @@ public class Dispatcher{
             sort(result);
             for (Person person : result) 
                 ConsoleHandler.write(person.toString());
-            binarySearch(result, Comparator.naturalOrder());
+            _binarySearch(result, Comparator.naturalOrder());
             writeToFile(result);
         }
     }
@@ -128,7 +128,7 @@ public class Dispatcher{
         return comparators.get(command);
     }
 
-    private <V> void binarySearch(List<Person> list, Comparator<V> comparator) {
+    private <V> void _binarySearch(List<Person> list, Comparator<V> comparator) {
 
         ConsoleHandler.write (
             """
