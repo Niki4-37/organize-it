@@ -13,6 +13,8 @@ import com.secondteam.utils.UtilApp;
 
 public class Dispatcher{
 
+    private boolean flag;
+
     private Map<String, Controller<Person>> controllers;
     private Map<String, Comparator<Person>> comparators;
 
@@ -22,13 +24,18 @@ public class Dispatcher{
     };
 
     public void run() {
-        ConsoleHandler.write ("Приветствуем вас в приложении Organaze-it ");
+
+        ConsoleHandler.write ("");
+        ConsoleHandler.write ("----------------------------------------------------------------");
+        ConsoleHandler.write ("");
+        ConsoleHandler.write ("Приветствуем вас в приложении Organaze-it");
+        ConsoleHandler.write ("");
+        ConsoleHandler.write ("----------------------------------------------------------------");
+        ConsoleHandler.write ("");
         
         while (true) {
             List<Person> result = getListUsingController();
-
             sort(result);
-
             writeToFile(result);
         }
     }
@@ -37,16 +44,17 @@ public class Dispatcher{
         
         ConsoleHandler.write (
             """
-            Требуется создать коллекцию сущностей Person
-            Введите команду \"file\" для создания коллекции сущностей на основе файла
-            Введите команду \"manual\" для создания коллекции сущностей вручную
-            Введите команду \"random\" для создания коллекции сущностей на основе случайного ввода
+            Требуется создать коллекцию сущностей Person.
+            Пожалуйста, выберите способ и введите соответствующую цифру:
+              - для создания коллекции сущностей на основе файла ........ введите цифру \"1\" 
+              - для создания коллекции сущностей вручную ................ введите цифру \"2\" 
+              - для создания коллекции сущностей произвольным образом ... введите цифру \"3\" 
             """);
         
         String command = ConsoleHandler.read().toLowerCase();;
         
         while (!controllers.containsKey(command)) {
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
             command = ConsoleHandler.read().toLowerCase();
         }
 
@@ -58,6 +66,8 @@ public class Dispatcher{
             ConsoleHandler.write(e.getMessage());
         }
 
+        flag = false;
+        
         return list;
     }
 
@@ -66,14 +76,14 @@ public class Dispatcher{
         UtilApp.sort(list, getComparator());
     }
 
-    private boolean shouldSort() {
+    private boolean shouldSort() { 
         String command;
         while (true) {
             ConsoleHandler.write("Требуется ли осуществить сортировку? Введите      Yes/No");
             command = ConsoleHandler.read().toLowerCase();
-            if (command.equalsIgnoreCase("no")) return false;
-            if (command.equalsIgnoreCase("yes")) return true;
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+            if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return false;
+            if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) return true;
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
         }
     }
 
@@ -90,7 +100,7 @@ public class Dispatcher{
             command = ConsoleHandler.read().toLowerCase();
 
             if (comparators.containsKey(command)) { break; }
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
         }
 
         return comparators.get(command);
@@ -101,12 +111,12 @@ public class Dispatcher{
         while (true) {
             ConsoleHandler.write("Сохранить коллекцию в файл? Введите      Yes/No");
             String command = ConsoleHandler.read().toLowerCase(); 
-            if (command.equalsIgnoreCase("no")) return;
-            if (command.equalsIgnoreCase("yes")) break;
-            ConsoleHandler.write ("Команда не найдена. Повторите, пожалуйста.");
+            if (command.equalsIgnoreCase("no" ) || command.equalsIgnoreCase("n")) return;
+            if (command.equalsIgnoreCase("yes") || command.equalsIgnoreCase("y")) break;
+            ConsoleHandler.write ("Команда не найдена. Пожалуйста, повторите.");
         }
         ConsoleHandler.write("Введите имя файла");
-        String fileName = ConsoleHandler.read(); //проверить на пустую строку
+        String fileName = ConsoleHandler.read(); 
         try {
             FileWriter.write(fileName, list);
         } catch (AppException e) {
