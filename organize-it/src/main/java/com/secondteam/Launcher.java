@@ -16,6 +16,7 @@ import com.secondteam.controller.Controller;
 
 public class Launcher {
     public static void main(String[] args) {
+        
         Validator         validator = new PersonValidator();
         Converter<Person> converter = new PersonConverter();
 
@@ -35,8 +36,14 @@ public class Launcher {
             "3", Comparator.comparingInt(Person::getAge),
             "4", defaultComparator
         );
+
+        Map<String, Function<Person, ?>> fieldGetters = Map.of(
+            "1", Person::getLastName,
+            "2", Person::getFirstName,
+            "3", Person::getAge,
+        );
         
-        Dispatcher dispatcher = new Dispatcher(controllers, comparators);
+        Dispatcher dispatcher = new Dispatcher(controllers, comparators, fieldGetters);
         dispatcher.run();
     }
 }
